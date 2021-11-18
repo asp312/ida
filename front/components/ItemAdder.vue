@@ -94,6 +94,8 @@ export default {
 .textarea{
     height: 108px;
     width: 284px;
+    max-height: 108px;
+    max-width: 284px;
     border-radius: 4px;
     box-shadow: -0.5px 0.5px 1.3px 0.2px rgb(189, 185, 185);
     border: none;

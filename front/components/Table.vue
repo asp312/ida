@@ -1,7 +1,7 @@
 <template>
     <div class="table-wrapper">
-        <div class="table-item" v-for="item of items" :key="item.id">
-            <div class="item-picture"><img :alt="item.title" width="323px" height="200px" src="https://ds-blobs-4.cdn.devapps.ru/15405903.png"></div>
+        <div class="table-item" v-for="(item, index) of items" :key="index" >
+            <div class="item-picture"><img :alt="item.title" width="332px" height="200px" src="https://ds-blobs-4.cdn.devapps.ru/15405903.png" class="pic"><div class="delete-pic-wrapper"><span class="delete-pic" @click="deleteItem($event)"><img class="del" width="16px" height="16px" src="~assets/img/delete 1.svg" alt="delete" :id="index"></span></div></div>
             <div class="item-description-block">
                 <p class="item-title">{{ item.title }}</p>
                 <p class="item-description">{{ item.description }}</p>
@@ -14,7 +14,13 @@
 <script>
 export default {
     name: 'Table',
-    props: ['items']
+    props: ['items'],
+    methods: {
+       deleteItem (e) {
+           let deletedItem = e.target.id
+           this.items = this.items.splice(deletedItem, 1) 
+       }
+    }
 }
 </script>
 
@@ -27,13 +33,46 @@ export default {
     width: 1028px;
 }
 .table-item{
-    width: 323px;
+    width: 332px;
     height: 423px;
     background-color: #FFFEFB;
     border: none;
     border-radius: 4px;
-    overflow: hidden;
     box-shadow: -0.5px 0.5px 1.3px 0.1px rgb(189, 185, 185);
+    transition-duration: 0.2s;
+    position: relative;
+}
+.delete-pic{
+    width: 32px;
+    height: 32px;
+    background-color: #FF8484;
+    border-radius: 10px;
+    content: ' ';
+    display: inline-block;
+    margin: 0 0  5.35px 0.5px;
+    position: absolute;
+    top: -8px;
+    right: -8px;
+}
+.delete-pic-wrapper{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    opacity: 0;
+}
+.delete-pic-wrapper:hover{
+    opacity: 1;
+}
+.table-item:hover{
+    transform: scale(1.03);
+    transition-duration: 0.2s;
+}
+.del{
+    padding: 7px 8px;
+}
+.pic{
+    border-radius: 4px 4px 0 0 ;
 }
 .item-picture{
     height: 200px;
@@ -49,6 +88,7 @@ export default {
 .item-description-block{
     margin-top: 16px;
     padding-left: 16px;
+    color: #3F3F3F;
 }
 .item-description{
     font-style: normal;
@@ -61,5 +101,6 @@ export default {
     font-weight: 600;
     font-size: 24px;
     line-height: 30px;
+    margin-top: 33px;
 }
 </style>
