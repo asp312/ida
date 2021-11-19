@@ -1,11 +1,11 @@
 <template>
     <div class="table-wrapper">
         <div class="table-item" v-for="(item, index) of items" :key="index" >
-            <div class="item-picture"><img :alt="item.title" width="332px" height="200px" src="https://ds-blobs-4.cdn.devapps.ru/15405903.png" class="pic"><div class="delete-pic-wrapper"><span class="delete-pic" @click="deleteItem($event)"><img class="del" width="16px" height="16px" src="~assets/img/delete 1.svg" alt="delete" :id="index"></span></div></div>
+            <div class="item-picture"><img :alt="item.title" width="332px" height="200px" :src="item.picUrl" class="pic"><div class="delete-pic-wrapper"><span class="delete-pic" @click="deleteItem($event)"><img class="del" width="16px" height="16px" src="~assets/img/delete 1.svg" alt="delete" :id="index"></span></div></div>
             <div class="item-description-block">
                 <p class="item-title">{{ item.title }}</p>
                 <p class="item-description">{{ item.description }}</p>
-                <p class="item-cost">{{ item.cost }}</p>
+                <p class="item-cost">{{ item.cost }} руб.</p>
             </div>
         </div>
     </div>
@@ -18,7 +18,8 @@ export default {
     methods: {
        deleteItem (e) {
            let deletedItem = e.target.id
-           this.items = this.items.splice(deletedItem, 1) 
+           this.items.splice(deletedItem, 1) 
+           localStorage.arr = JSON.stringify(this.items)
        }
     }
 }
@@ -95,6 +96,8 @@ export default {
     font-weight: normal;
     font-size: 16px;
     line-height: 20px;
+    height: 80px;
+    box-sizing: border-box;
 }
 .item-cost{
     font-style: normal;

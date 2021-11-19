@@ -3,28 +3,85 @@
         <div class="inputs-wrapper">
             <div class="input-wrapper">
                 <label for="ItemDescription" class="label">Наименование товара</label><br>
-                <input id="ItemName" placeholder="Введите наименование товара" class="input">
+                <input id="ItemName" placeholder="Введите наименование товара" class="input inputName required" v-model="itemName">
+                <span class="error-message message-name">Обязяательное поле</span>
             </div>
             <div class="input-wrapper">
                 <label for="ItemDescription" class="textarea-label">Описание товара</label><br>
-                <textarea id="ItemDescription" placeholder="Введите описание товара" class="textarea" />
+                <textarea id="ItemDescription" placeholder="Введите описание товара" class="textarea" v-model="itemDescription"/>
             </div>
             <div class="input-wrapper">
                 <label for="ItemImageLink" class="label">Ссылка на изображение товара</label><br>
-                <input id="ItemImageLink" placeholder="Введите ссылку" class="input">
+                <input id="ItemImageLink" placeholder="Введите ссылку" class="input inputPic required" v-model="itemPic">
+                <span class="error-message message-pic">Обязяательное поле</span>
             </div>
             <div class="input-wrapper">
                 <label for="ItemCost" class="label">Цена товара</label><br>
-                <input id="ItemCost" placeholder="Введите цену" class="input">
+                <input id="ItemCost" placeholder="Введите цену" class="input inputCost required" v-model="itemCost" type="number">
+                <span class="error-message message-cost">Обязяательное поле</span>
             </div>
-            <button class="add-button">Добавить товар</button>
+            <button v-bind:class="[{addButton: (this.itemPic.match(/\.(jpeg|jpg|gif|png)$/) && (this.itemName.length > 0) && (this.itemCost > 0))}, {addButtonV2: !(this.itemPic.match(/\.(jpeg|jpg|gif|png)$/) && (this.itemName.length > 0) && (this.itemCost > 0))}]" @click="spentItemInfo" 
+                    :disabled="!(this.itemPic.match(/\.(jpeg|jpg|gif|png)$/) && (this.itemName.length > 0) && (this.itemCost > 0))">Добавить товар</button>
         </div>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'ItemAdder'
+    name: 'ItemAdder',
+    data () {
+        return {
+            itemName: '',
+            itemDescription: '',
+            itemPic: '',
+            itemCost: null,
+        }
+    },
+    watch: {
+        itemName () {
+            if (this.itemName.length > 0) {
+                document.querySelector('.inputName').classList.remove('required')
+                document.querySelector('.message-name').classList.add('notShow')
+            }else{
+                document.querySelector('.inputName').classList.add('required')
+                document.querySelector('.message-name').classList.remove('notShow')
+            }
+        },
+        itemPic () {
+            if (this.itemPic.match(/\.(jpeg|jpg|gif|png)$/)) {
+                document.querySelector('.inputPic').classList.remove('required')
+                document.querySelector('.message-pic').classList.add('notShow')
+            }else{
+                document.querySelector('.inputPic').classList.add('required')
+                document.querySelector('.message-pic').classList.remove('notShow')
+                document.querySelector('.message-pic').innerHTML = "не правильный url или его отсутствие"
+            }
+        },
+        itemCost () {
+            if (this.itemCost > 0) {
+                document.querySelector('.inputCost').classList.remove('required')
+                document.querySelector('.message-cost').classList.add('notShow')
+            }else{
+                document.querySelector('.inputCost').classList.add('required')
+                document.querySelector('.message-cost').classList.remove('notShow')
+            }
+        }
+    },
+    methods: {
+        spentItemInfo () {
+            let data = {
+                title: this.itemName,
+                description: this.itemDescription,
+                picUrl: this.itemPic,
+                cost: this.itemCost
+            }
+            this.$emit('spentItemInfo', data)
+            this.itemName = '',
+            this.itemDescription = '',
+            this.itemPic = '',
+            this.itemCost = null
+        }
+    }
 }
 </script>
 
@@ -49,6 +106,9 @@ export default {
     width: 284px;
     margin-bottom: 16px;
 }
+.inputPic{
+    padding-right: 16px;
+}
 .input-wrapper:nth-child(2){
     width: 284px;
     margin-bottom: 13px;
@@ -71,12 +131,31 @@ export default {
     background-color: #FFFEFB;
     color: #B4B4B4;
 }
-.add-button{
+.required{
+    border: 1px solid #FF8484;
+}
+.notShow{
+    display: none;
+}
+.addButton{
     width: 100%;
     height: 36px;
     border: none;
     border-radius: 10px;
-    background-color: #EEEEEE;
+    background-color: #7BAE73;
+    color: #ffffff;
+    margin-top: 7px;
+    font-family: 'Inter', 'sans-serif';
+    font-weight: 600;
+    font-size: 11.5px;
+}
+.addButtonV2{
+    width: 100%;
+    height: 36px;
+    border: none;
+    border-radius: 10px;
+    background-color:#EEEEEE;
+    color: #B4B4B4;
     margin-top: 7px;
     font-family: 'Inter', 'sans-serif';
     font-weight: 600;
@@ -106,5 +185,11 @@ export default {
     font-family: 'SourceSansPro', sans-serif;
     background-color: #FFFEFB;
     color: #B4B4B4;
+    resize: none;
+}
+.error-message{
+    position: absolute;
+    margin-top: 1px;
+    color: #FF8484;
 }
 </style>
