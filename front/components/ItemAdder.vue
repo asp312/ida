@@ -27,6 +27,7 @@
 </template>
 
 <script>
+
 export default {
     name: 'ItemAdder',
     data () {
@@ -67,19 +68,29 @@ export default {
             }
         }
     },
+    computed: {
+        getItems(){
+            return this.$store.getters['items/items']
+        }
+    },
     methods: {
         spentItemInfo () {
+            this.itemCost = new Intl.NumberFormat('ru-Ru', {
+                style: 'decimal',
+            }).format(this.itemCost)
             let data = {
                 title: this.itemName,
                 description: this.itemDescription,
                 picUrl: this.itemPic,
                 cost: this.itemCost
             }
-            this.$emit('spentItemInfo', data)
             this.itemName = '',
             this.itemDescription = '',
             this.itemPic = '',
             this.itemCost = null
+            this.$store.dispatch('items/add', data)
+            console.log(this.$store.getters['items/items'], 'this.$store.getters.items')
+
         }
     }
 }

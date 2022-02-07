@@ -1,6 +1,6 @@
 <template>
     <div class="table-wrapper">
-        <div class="table-item" v-for="(item, index) of items" :key="index" >
+        <div class="table-item" v-for="(item, index) of getItems" :key="index" >
             <div class="item-picture"><img :alt="item.title" width="332px" height="200px" :src="item.picUrl" class="pic"><div class="delete-pic-wrapper"><span class="delete-pic" @click="deleteItem($event)"><img class="del" width="16px" height="16px" src="~assets/img/delete 1.svg" alt="delete" :id="index"></span></div></div>
             <div class="item-description-block">
                 <p class="item-title">{{ item.title }}</p>
@@ -14,18 +14,23 @@
 <script>
 export default {
     name: 'Table',
-    props: ['items'],
     methods: {
        deleteItem (e) {
            let deletedItem = e.target.id
-           this.items.splice(deletedItem, 1) 
-           localStorage.arr = JSON.stringify(this.items)
+           this.$store.dispatch('items/del', deletedItem)
+           console.log(this.getItems)
        }
+    },
+    computed: {
+        getItems(){
+            return this.$store.getters['items/items']
+        }
     }
 }
 </script>
 
 <style scoped>
+
 .table-wrapper{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -54,6 +59,7 @@ export default {
     position: absolute;
     top: -8px;
     right: -8px;
+    cursor: pointer;
 }
 .delete-pic-wrapper{
     height: 100%;
@@ -105,5 +111,20 @@ export default {
     font-size: 24px;
     line-height: 30px;
     margin-top: 33px;
+}
+@media (max-width: 1024px) {
+    .table-wrapper{
+        grid-template-columns: 1fr 1fr;
+        width: 670px;
+    }
+    .table-item{
+        width: 325px;
+    }
+    .page{
+        width: 970px;
+    }
+    .pic{
+        width: 325px;
+    }
 }
 </style>
