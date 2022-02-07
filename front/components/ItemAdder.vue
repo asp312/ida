@@ -89,7 +89,6 @@ export default {
             this.itemPic = '',
             this.itemCost = null
             this.$store.dispatch('items/add', data)
-            console.log(this.$store.getters['items/items'], 'this.$store.getters.items')
 
         }
     }

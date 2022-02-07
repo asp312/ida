@@ -18,7 +18,6 @@ export default {
        deleteItem (e) {
            let deletedItem = e.target.id
            this.$store.dispatch('items/del', deletedItem)
-           console.log(this.getItems)
        }
     },
     computed: {
